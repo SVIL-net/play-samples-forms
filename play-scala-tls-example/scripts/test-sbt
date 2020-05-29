@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-export KEY_PASSWORD=`cat scripts/password` 
-
-echo "+---------------------------------------+"
-echo "| Executing tests using (modified sbt)  |"
-echo "+---------------------------------------+"
-./play ++$TRAVIS_SCALA_VERSION test

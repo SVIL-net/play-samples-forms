@@ -1,22 +1,17 @@
-# Play samples
+# play-scala-forms-example
 
-[![Build Status](https://travis-ci.com/playframework/play-samples.svg?branch=2.8.x)](https://travis-ci.com/playframework/play-samples)
-[![GitHub issues](https://img.shields.io/github/issues/playframework/play-samples.svg?style=flat)](https://github.com/playframework/play-samples/issues)
-[![GitHub forks](https://img.shields.io/github/forks/playframework/play-samples.svg?style=flat)](https://github.com/playframework/play-samples/network)
-[![GitHub stars](https://img.shields.io/github/stars/playframework/play-samples.svg?style=flat)](https://github.com/playframework/play-samples/stargazers)
+This example shows form processing and form helper handling under Play 2.8.x.
 
-#### License
+## How to run
 
-<sup>
-To the extent possible under law, the author(s) have dedicated all copyright and
-related and neighboring rights to this software to the public domain worldwide.
-This software is distributed without any warranty.
-</sup>
+Start the Play app:
 
-<br>
+```bash
+sbt run
+```
 
-<sub>
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion by you shall be licensed as above, without any additional terms
-or conditions.
-</sub>
+And open [http://localhost:9000/](http://localhost:9000/)
+
+## Credits
+
+Originally written by Chris Birchall and the Guardian Team: <https://github.com/cb372/play-forms-tutorial>.  Much thanks, especially for the [article](https://www.theguardian.com/info/developer-blog/2015/dec/30/how-to-add-a-form-to-a-play-application).

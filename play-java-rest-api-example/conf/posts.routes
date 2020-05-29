@@ -1,6 +1,0 @@
-
-GET    /                     v1.post.PostController.list(request:Request)
-POST   /                     v1.post.PostController.create(request:Request)
-
-GET    /:id                 v1.post.PostController.show(request:Request,id)
-PUT    /:id                 v1.post.PostController.update(request:Request, id)

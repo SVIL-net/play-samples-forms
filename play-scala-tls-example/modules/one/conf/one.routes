@@ -1,3 +1,0 @@
-GET /                  controllers.one.HomeController.index()
-
-GET /assets/*file           controllers.Assets.at(path="/public/lib/one", file)
