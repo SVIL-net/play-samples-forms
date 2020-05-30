@@ -23,9 +23,9 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
   import WidgetForm._
 
   private val widgets = mutable.ArrayBuffer(
-    Widget("Widget 1", 123),
-    Widget("Widget 2", 456),
-    Widget("Widget 3", 789)
+    Widget("着氷している位置", 500),
+    Widget("1時間後に着氷する位置", 1000),
+    Widget("相対劣化している位置", 2000)
   )
 
   // The URL to the widget.  You can call this directly from the template, but it
