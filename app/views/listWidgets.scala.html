@@ -5,8 +5,8 @@
     <h1>価格表</h1>
 
     @* Flash shows updates to a page *@
-    @request.flash.data.map{ case (name, value) =>
-      <div>@name: @value</div>
+    @request.flash.data.map{ case (name, value, num) =>
+      <div>@name: @value: @num</div>
     }
 
     <table>
@@ -15,7 +15,7 @@
       </thead>
       <tbody>
       @for(w <- widgets) {
-        <tr><td>@w.name</td><td>@w.price</td></tr>
+        <tr><td>@w.name</td><td>@w.price</td><td>@w.num</td>td></td></tr>
       }
       </tbody>
     </table>
@@ -37,7 +37,7 @@
       @helper.inputText(form("name"))
 
       @helper.inputText(form("price"))
-
+      @helper.inputText(form("num"))
       <button>Create widget</button>
     }
   }
