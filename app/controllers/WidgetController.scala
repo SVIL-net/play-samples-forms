@@ -37,6 +37,9 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
     Ok(views.html.index())
   }
 
+  def show = Action { implicit request: MessagesRequest[AnyContent] =>
+    Ok(views.html.show(widgets.toSeq))
+  }
   def listWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
     // Pass an unpopulated form to the template
     Ok(views.html.listWidgets(widgets.toSeq, form, postUrl))

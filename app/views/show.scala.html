@@ -1,0 +1,31 @@
+@(widgets: Seq[Widget])(implicit request: MessagesRequestHeader)
+
+  @main("Widgets") {
+
+    <h1>Widgets</h1>
+
+    @* Flash shows updates to a page *@
+    @request.flash.data.map{ case (name, value) =>
+      <div>@name: @value</div>
+    }
+
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Price</th>
+      </thead>
+      <tbody>
+      @for(w <- widgets) {
+        <tr><td>@w.name</td><td>@w.price</td></tr>
+      }
+      </tbody>
+    </table>
+
+    <hr/>
+
+    <div>
+        <ul>
+          <li><a href="@routes.WidgetController.show">@routes.WidgetController.show</a></li>
+          <li><a href="@routes.WidgetController.listWidgets">@routes.WidgetController.listWidgets</a></li>
+        </ul>
+      </div>
+  }

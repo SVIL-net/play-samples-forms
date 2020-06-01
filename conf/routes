@@ -6,6 +6,7 @@
 GET     /                           controllers.WidgetController.index
 
 # Widgets
+GET     /show                       controllers.WidgetController.show
 GET     /widgets                    controllers.WidgetController.listWidgets
 POST    /widgets                    controllers.WidgetController.createWidget
 
