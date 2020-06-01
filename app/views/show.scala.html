@@ -1,25 +1,31 @@
-@(widgets: Seq[Widget])(implicit request: MessagesRequestHeader)
+@(widgets: Seq[Widget], total: Int, countForm: Form[WidgetForm.Count], postUrl: Call)(implicit request: MessagesRequestHeader)
 
   @main("Widgets") {
 
     <h1>Widgets</h1>
 
-    @* Flash shows updates to a page *@
-    @request.flash.data.map{ case (name, value) =>
-      <div>@name: @value</div>
-    }
+    
 
     <table>
       <thead>
         <tr><th>Name</th><th>Price</th>
       </thead>
-      <tbody>
-      @for(w <- widgets) {
-        <tr><td>@w.name</td><td>@w.price</td></tr>
-      }
-      </tbody>
-    </table>
+            <tbody>
+            @for(w <- widgets) {
+                <tr><td>@w.name</td><td>@w.price</td> <td></td></tr>
+            }
+            </tbody>
 
+    </table>
+    @helper.form(postUrl){
+        @helper.CSRF.formField
+
+        @helper.repeat(countForm("num"), min=widgets.length){ n=>
+            @helper.inputText(n)
+        }
+    <button>Get total</button>
+    }
+    Total: @total
     <hr/>
 
     <div>

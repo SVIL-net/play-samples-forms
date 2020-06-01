@@ -8,6 +8,7 @@ import play.api.i18n._
 import play.api.mvc._
 
 import scala.collection._
+import org.checkerframework.checker.units.qual.A
 
 /**
  * The classic WidgetController using MessagesAbstractController.
@@ -27,18 +28,39 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
     Widget("Widget 2", 456),
     Widget("Widget 3", 789)
   )
+  private var total:Int = 0
 
   // The URL to the widget.  You can call this directly from the template, but it
   // can be more convenient to leave the template completely stateless i.e. all
   // of the "WidgetController" references are inside the .scala file.
   private val postUrl = routes.WidgetController.createWidget()
+  private val computeUrl = routes.WidgetController.calc()
 
   def index = Action {
     Ok(views.html.index())
   }
 
   def show = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.show(widgets.toSeq))
+    Ok(views.html.show(widgets.toSeq, total, countForm, computeUrl))
+  }
+  def calc = Action { implicit request: MessagesRequest[AnyContent] =>
+     val errorFunction = { formWithErrors: Form[Count] =>
+      // This is the bad case, where the form had validation errors.
+      // Let's show the user the form again, with the errors highlighted.
+      // Note how we pass the form with errors to the template.
+      BadRequest(views.html.show(widgets.toSeq, total, formWithErrors, computeUrl))
+    }
+
+    val successFunction = { count: Count =>
+      // This is the good case, where the form was successfully parsed as a Data object.
+      println(count.num)
+      total = count.num.zip(widgets).foldRight(0)(
+        (Z,b) => b+Z._1*Z._2.price
+      )
+      Redirect(routes.WidgetController.show())
+    }
+    val formValidationResult = countForm.bindFromRequest
+    formValidationResult.fold(errorFunction, successFunction)
   }
   def listWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
     // Pass an unpopulated form to the template

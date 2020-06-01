@@ -11,7 +11,7 @@ object WidgetForm {
    * of a parameter tampering attack and makes code clearer.
    */
   case class Data(name: String, price: Int)
-
+  case class Count(num: IndexedSeq[Int])
   /**
    * The form definition for the "create a widget" form.
    * It specifies the form fields and their types,
@@ -22,5 +22,10 @@ object WidgetForm {
       "name" -> nonEmptyText,
       "price" -> number(min = 0)
     )(Data.apply)(Data.unapply)
+  )
+  val countForm = Form(
+    mapping(
+        "num" -> indexedSeq(number(min=0))
+    )(Count.apply)(Count.unapply)
   )
 }

@@ -7,6 +7,7 @@ GET     /                           controllers.WidgetController.index
 
 # Widgets
 GET     /show                       controllers.WidgetController.show
+POST    /show                       controllers.WidgetController.calc
 GET     /widgets                    controllers.WidgetController.listWidgets
 POST    /widgets                    controllers.WidgetController.createWidget
 
