@@ -1,0 +1,30 @@
+@(widgets: Seq[Widget], form: Form[WidgetForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
+
+  @main("Post") {
+
+    <h1>Post</h1>
+
+    @* Global errors are not tied to any particular form field *@
+    @if(form.hasGlobalErrors) {
+      @form.globalErrors.map { error: FormError =>
+        <div>
+          @error.key: @error.message
+        </div>
+      }
+    }
+
+    @helper.form(postUrl) {
+      @helper.CSRF.formField
+
+      @helper.inputText(form("name"))
+
+      @helper.inputText(form("price"))
+
+      <button>Create widget</button>
+    }
+
+    <hr>
+    <div>
+      Go to [<a href="@routes.WidgetController.listWidgets">List</a>]
+    </div>
+  }

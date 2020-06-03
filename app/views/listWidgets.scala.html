@@ -1,8 +1,8 @@
 @(widgets: Seq[Widget], form: Form[WidgetForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
 
-  @main("Widgets") {
+  @main("List") {
 
-    <h1>Widgets</h1>
+    <h1>List</h1>
 
     @* Flash shows updates to a page *@
     @request.flash.data.map{ case (name, value) =>
@@ -20,24 +20,9 @@
       </tbody>
     </table>
 
-    <hr/>
+    <hr>
+    <div>
+      Go to [<a href="@routes.WidgetController.postWidgets">Post</a>]
+    </div>
 
-    @* Global errors are not tied to any particular form field *@
-    @if(form.hasGlobalErrors) {
-      @form.globalErrors.map { error: FormError =>
-        <div>
-          @error.key: @error.message
-        </div>
-      }
-    }
-
-    @helper.form(postUrl) {
-      @helper.CSRF.formField
-
-      @helper.inputText(form("name"))
-
-      @helper.inputText(form("price"))
-
-      <button>Create widget</button>
-    }
   }
