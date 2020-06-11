@@ -23,15 +23,19 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
   import WidgetForm._
 
   private val widgets = mutable.ArrayBuffer(
-    Widget("Widget 1", 123),
-    Widget("Widget 2", 456),
-    Widget("Widget 3", 789)
+    Widget("Apple", 100),
+    Widget("Banana", 200),
+    Widget("Orange", 300)
   )
+
+  private var total:Int = 0
+
 
   // The URL to the widget.  You can call this directly from the template, but it
   // can be more convenient to leave the template completely stateless i.e. all
   // of the "WidgetController" references are inside the .scala file.
   private val postUrl = routes.WidgetController.createWidget()
+  private val calcUrl = routes.WidgetController.calcFunc()
 
   def index = Action {
     Ok(views.html.index())
@@ -39,7 +43,28 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
 
   def listWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
     // Pass an unpopulated form to the template
-    Ok(views.html.listWidgets(widgets.toSeq, form, postUrl))
+    Ok(views.html.listWidgets(widgets.toSeq, total, form, numForm, calcUrl))
+  }
+
+  def calcFunc = Action { implicit request: MessagesRequest[AnyContent] =>
+    val errorFunction = { formWithErrors: Form[Num] =>
+      // This is the bad case, where the form had validation errors.
+      // Let's show the user the form again, with the errors highlighted.
+      // Note how we pass the form with errors to the template.
+      BadRequest(views.html.listWidgets(widgets.toSeq, total, form, formWithErrors, calcUrl))
+    }
+
+    val successFunction = { numbers: Num =>
+      // This is the good case, where the form was successfully parsed as a Data object.
+      val widgetsList = widgets.toArray
+      total = 0
+      for {i <- 0 to widgetsList.length - 1}
+        total += numbers.numbers(i) * widgetsList(i).price
+      Redirect(routes.WidgetController.listWidgets())
+    }
+
+    val formValidationResult = numForm.bindFromRequest
+    formValidationResult.fold(errorFunction, successFunction)
   }
 
   def postWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -53,7 +78,7 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
       // This is the bad case, where the form had validation errors.
       // Let's show the user the form again, with the errors highlighted.
       // Note how we pass the form with errors to the template.
-      BadRequest(views.html.listWidgets(widgets.toSeq, formWithErrors, postUrl))
+      BadRequest(views.html.listWidgets(widgets.toSeq, total, formWithErrors, numForm, postUrl))
     }
 
     val successFunction = { data: Data =>

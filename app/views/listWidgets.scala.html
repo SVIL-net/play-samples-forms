@@ -1,4 +1,4 @@
-@(widgets: Seq[Widget], form: Form[WidgetForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
+@(widgets: Seq[Widget], total: Int, form: Form[WidgetForm.Data], numForm: Form[WidgetForm.Num], calcUrl: Call)(implicit request: MessagesRequestHeader)
 
   @main("List") {
 
@@ -11,7 +11,7 @@
 
     <table>
       <thead>
-        <tr><th>Name</th><th>Price</th>
+        <tr><th>Name</th><th>Price</th></tr>
       </thead>
       <tbody>
       @for(w <- widgets) {
@@ -19,6 +19,17 @@
       }
       </tbody>
     </table>
+
+    @helper.form(calcUrl) {
+      @helper.CSRF.formField
+
+      @helper.repeat(numForm("numbers"), min = widgets.length) { numField =>
+        @helper.inputText(numField)
+      }
+      <button>Sum all items</button>
+    }
+    Total: @total
+    
 
     <hr>
     <div>

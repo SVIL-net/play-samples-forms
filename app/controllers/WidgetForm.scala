@@ -11,6 +11,7 @@ object WidgetForm {
    * of a parameter tampering attack and makes code clearer.
    */
   case class Data(name: String, price: Int)
+  case class Num(numbers: List[Int])
 
   /**
    * The form definition for the "create a widget" form.
@@ -22,5 +23,10 @@ object WidgetForm {
       "name" -> nonEmptyText,
       "price" -> number(min = 0)
     )(Data.apply)(Data.unapply)
+  )
+  val numForm = Form(
+    mapping(
+      "numbers" -> list(number),
+    )(Num.apply)(Num.unapply)
   )
 }
