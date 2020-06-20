@@ -23,9 +23,9 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
   import WidgetForm._
 
   private val widgets = mutable.ArrayBuffer(
-    Widget("Widget 1", 123),
-    Widget("Widget 2", 456),
-    Widget("Widget 3", 789)
+    Widget("Widget_1", 123),
+    Widget("Widget_2", 456),
+    Widget("Widget_3", 789)
   )
 
   // The URL to the widget.  You can call this directly from the template, but it
@@ -37,6 +37,9 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
     Ok(views.html.index())
   }
 
+  def show = Action { implicit request: MessagesRequest[AnyContent] =>
+    Ok(views.html.show(widgets.toSeq))
+  }
   def listWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
     // Pass an unpopulated form to the template
     Ok(views.html.listWidgets(widgets.toSeq, form, postUrl))

@@ -2,7 +2,7 @@
 
   @main("Widgets") {
 
-    <h1>Widgets</h1>
+    <h1>Widgets_list</h1>
 
     @* Flash shows updates to a page *@
     @request.flash.data.map{ case (name, value) =>
@@ -11,7 +11,7 @@
 
     <table>
       <thead>
-        <tr><th>Name</th><th>Price</th>
+        <tr><th>Name |</th><th>Price</th>
       </thead>
       <tbody>
       @for(w <- widgets) {
@@ -40,4 +40,11 @@
 
       <button>Create widget</button>
     }
+    
+    <div>
+      <ul>
+        <li>EEE<a href="@routes.WidgetController.show">@routes.WidgetController.show</a></li>
+        <li>FFF<a href="@routes.WidgetController.listWidgets">@routes.WidgetController.listWidgets</a></li>
+      </ul>
+    </div>
   }
