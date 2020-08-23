@@ -2,12 +2,14 @@ package controllers
 
 import javax.inject.Inject
 
-import models.Widget
+import models._
 import play.api.data._
 import play.api.i18n._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import scala.collection._
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * The classic WidgetController using MessagesAbstractController.
@@ -19,14 +21,11 @@ import scala.collection._
  * See https://www.playframework.com/documentation/2.8.x/ScalaForms#passing-messagesprovider-to-form-helpers
  * for details.
  */
-class WidgetController @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+class WidgetController @Inject()(repo: WidgetRepository,
+                                  cc: MessagesControllerComponents
+                                  )(implicit ec: ExecutionContext)
+  extends MessagesAbstractController(cc) {
   import WidgetForm._
-
-  private val widgets = mutable.ArrayBuffer(
-    Widget("Apple", 100),
-    Widget("Banana", 200),
-    Widget("Orange", 300)
-  )
 
   private var total:Int = 0
 
@@ -41,54 +40,52 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
     Ok(views.html.index())
   }
 
-  def listWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
+  def listWidgets = Action.async { implicit request =>
+    repo.list().map{ widget =>
     // Pass an unpopulated form to the template
-    Ok(views.html.listWidgets(widgets.toSeq, total, form, numForm, calcUrl))
+      Ok(views.html.listWidgets(widget, total, form, numForm, calcUrl))
+    }
   }
 
-  def calcFunc = Action { implicit request: MessagesRequest[AnyContent] =>
-    val errorFunction = { formWithErrors: Form[Num] =>
-      // This is the bad case, where the form had validation errors.
-      // Let's show the user the form again, with the errors highlighted.
-      // Note how we pass the form with errors to the template.
-      BadRequest(views.html.listWidgets(widgets.toSeq, total, form, formWithErrors, calcUrl))
-    }
-
-    val successFunction = { numbers: Num =>
-      // This is the good case, where the form was successfully parsed as a Data object.
-      val widgetsList = widgets.toArray
-      total = 0
-      for {i <- 0 to widgetsList.length - 1}
-        total += numbers.numbers(i) * widgetsList(i).price
-      Redirect(routes.WidgetController.listWidgets())
-    }
-
-    val formValidationResult = numForm.bindFromRequest
-    formValidationResult.fold(errorFunction, successFunction)
+  def calcFunc = Action.async { implicit request =>
+    numForm.bindFromRequest.fold(
+      errorForm => {
+          Future.successful(Ok(views.html.listWidgets(Nil, total, form, errorForm, calcUrl)))
+      },
+      numbers => {
+        repo.list().map{ widget =>
+          val widgetsList = widget.toArray
+          total = 0
+          for {i <- 0 to widgetsList.length - 1}
+            total += numbers.numbers(i) * widgetsList(i).price
+          Redirect(routes.WidgetController.listWidgets())
+        }
+      }
+    )
   }
 
-  def postWidgets = Action { implicit request: MessagesRequest[AnyContent] =>
+  def getWidgets = Action.async { implicit request =>
+    repo.list().map { widget =>
+      Ok(Json.toJson(widget))
+    }
+  }
+
+  def postWidgets = Action { implicit request =>
     // Pass an unpopulated form to the template
-    Ok(views.html.postWidgets(widgets.toSeq, form, postUrl))
+    Ok(views.html.postWidgets(form, postUrl))
   }
 
   // This will be the action that handles our form post
-  def createWidget = Action { implicit request: MessagesRequest[AnyContent] =>
-    val errorFunction = { formWithErrors: Form[Data] =>
-      // This is the bad case, where the form had validation errors.
-      // Let's show the user the form again, with the errors highlighted.
-      // Note how we pass the form with errors to the template.
-      BadRequest(views.html.listWidgets(widgets.toSeq, total, formWithErrors, numForm, postUrl))
-    }
-
-    val successFunction = { data: Data =>
-      // This is the good case, where the form was successfully parsed as a Data object.
-      val widget = Widget(name = data.name, price = data.price)
-      widgets += widget
-      Redirect(routes.WidgetController.listWidgets()).flashing("info" -> "Widget added!")
-    }
-
-    val formValidationResult = form.bindFromRequest
-    formValidationResult.fold(errorFunction, successFunction)
+  def createWidget = Action.async { implicit request =>
+    form.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(Ok(views.html.postWidgets(errorForm, postUrl)))
+      },
+      widget => {
+        repo.create(widget.name, widget.price).map { _ =>
+          Redirect(routes.WidgetController.listWidgets).flashing("info" -> "Widget added!")
+        }
+      }
+    )
   }
 }

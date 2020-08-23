@@ -13,5 +13,8 @@ POST    /list                       controllers.WidgetController.calcFunc
 GET     /post                       controllers.WidgetController.postWidgets
 POST    /post                       controllers.WidgetController.createWidget
 
+# Json
+GET     /listWidgets                controllers.WidgetController.getWidgets
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

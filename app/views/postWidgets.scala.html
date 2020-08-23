@@ -1,4 +1,4 @@
-@(widgets: Seq[Widget], form: Form[WidgetForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
+@(form: Form[WidgetForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
 
   @main("Post") {
 
@@ -25,6 +25,6 @@
 
     <hr>
     <div>
-      Go to [<a href="@routes.WidgetController.listWidgets">List</a>]
+      Go to [<a href="@routes.WidgetController.listWidgets">List</a>] [<a href="@routes.WidgetController.getWidgets">JSON</a>]
     </div>
   }
