@@ -48,14 +48,14 @@ class WidgetController @Inject()(cc: MessagesControllerComponents) extends Messa
       // This is the bad case, where the form had validation errors.
       // Let's show the user the form again, with the errors highlighted.
       // Note how we pass the form with errors to the template.
-      BadRequest(views.html.listWidgets(widgets.toSeq, formWithErrors, postUrl))
+      BadRequest(views.html.createWidgets(widgets.toSeq, formWithErrors, postUrl))
     }
 
     val successFunction = { data: Data =>
       // This is the good case, where the form was successfully parsed as a Data object.
       val widget = Widget(name = data.name, price = data.price)
       widgets += widget
-      Redirect(routes.WidgetController.listWidgets()).flashing("info" -> "Widget added!")
+      Redirect(routes.WidgetController.index()).flashing("info" -> "Widget added!")
     }
 
     val formValidationResult = form.bindFromRequest

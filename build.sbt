@@ -7,6 +7,9 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       guice,
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
+      "com.typesafe.play" %% "play-slick" % "5.0.0", //追加
+      "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",//追加
+      "com.h2database" % "h2" % "1.4.199",//追加
     ),
     scalacOptions ++= Seq(
       "-feature",
@@ -14,3 +17,4 @@ lazy val root = (project in file("."))
       "-Xfatal-warnings"
     )
   )
+
