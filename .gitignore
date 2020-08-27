@@ -3,3 +3,4 @@ target/
 RUNNING_PID
 .metals/
 .bloop/
+project/metals.sbt
