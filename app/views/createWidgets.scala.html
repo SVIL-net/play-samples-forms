@@ -1,0 +1,23 @@
+@(widget: Form[WidgetForm.Data])(implicit request: MessagesRequestHeader)
+
+@import helper._
+
+@request.flash.get("success").map { key =>
+   @request.messages(key)
+}
+
+<h1>Add Beer</h1>
+
+<hr/>
+
+@main("Welcome to Play") {
+  @form(routes.WidgetController.addWidget()) {
+		@inputText(widget("name"))
+		@inputText(widget("price"))
+		@CSRF.formField
+
+		<div class="buttons">
+			<input type="submit" value="Add Widget"/>
+		</div>
+	}
+}

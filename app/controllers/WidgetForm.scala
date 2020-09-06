@@ -18,7 +18,7 @@ object WidgetForm {
    * as well as how to convert from a Data to form data and vice versa.
    */
   val form = Form(
-    mapping(
+    mapping( 
       "name" -> nonEmptyText,
       "price" -> number(min = 0)
     )(Data.apply)(Data.unapply)

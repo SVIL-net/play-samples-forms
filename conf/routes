@@ -5,9 +5,14 @@
 # Home page
 GET     /                           controllers.WidgetController.index
 
-# Widgets
-GET     /widgets                    controllers.WidgetController.listWidgets
-POST    /widgets                    controllers.WidgetController.createWidget
+# List Widgets
+GET     /Listwidgets                    controllers.WidgetController.listWidgets
+
+# Create Widget
+GET    /Createwidget                    controllers.WidgetController.createWidget
+
+# Add Widgest
+POST   /Addwidget                    controllers.WidgetController.addWidget
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
