@@ -1,5 +1,9 @@
-logs/
-target/
-RUNNING_PID
-.metals/
-.bloop/
+.bloop/ 
+.g8/ 
+.metals/ 
+.vscode/
+logs/ 
+sbt-dist/ 
+target/ 
+project/project/ 
+project/target/ 
