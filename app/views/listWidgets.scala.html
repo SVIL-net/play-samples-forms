@@ -1,5 +1,4 @@
 @(widgets: Seq[Widget], form: Form[WidgetForm.Data], postUrl: Call)(implicit request: MessagesRequestHeader)
-
   @main("Widgets") {
 
     <h1>Widgets</h1>
@@ -14,9 +13,12 @@
         <tr><th>Name</th><th>Price</th>
       </thead>
       <tbody>
-      @for(w <- widgets) {
-        <tr><td>@w.name</td><td>@w.price</td></tr>
+      @for(w <- widgets) {　　
+        <tr><td>@w.name</td><td>　@w.price</td></tr>
+      
       }
+      
+
       </tbody>
     </table>
 
@@ -33,11 +35,18 @@
 
     @helper.form(postUrl) {
       @helper.CSRF.formField
-
       @helper.inputText(form("name"))
-
       @helper.inputText(form("price"))
 
       <button>Create widget</button>
     }
   }
+
+  <div>
+    <ul>
+      <li><a href="@routes.WidgetController.show">@routes.WidgetController.show</a></li>
+      <li><a href="@routes.WidgetController.listWidgets">@routes.WidgetController.listWidgets</a></li>
+    </ul>
+  </div>   
+
+
